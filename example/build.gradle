@@ -1,0 +1,13 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            url "$rootProject.buildDir/repo"
+        }
+    }
+    dependencies {
+        classpath "fr.cvlaminck.gradle:versioning-plugin:1.0"
+    }
+}
+
+apply plugin: "fr.cvlaminck.gradle.versioning-java"

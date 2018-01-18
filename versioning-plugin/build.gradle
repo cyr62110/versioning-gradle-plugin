@@ -1,0 +1,23 @@
+plugins {
+    id 'java-gradle-plugin'
+    id 'maven-publish'
+}
+
+version '1.0'
+
+gradlePlugin {
+    plugins {
+        versioningJava {
+            id = 'fr.cvlaminck.gradle.versioning-java'
+            implementationClass = 'fr.cvlaminck.gradle.versioning.JavaVersioningPlugin'
+        }
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            url "$rootProject.buildDir/repo"
+        }
+    }
+}

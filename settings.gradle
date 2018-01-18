@@ -1,0 +1,3 @@
+include ":versioning-plugin"
+include ":example"
+

@@ -11,3 +11,12 @@ buildscript {
 }
 
 apply plugin: "fr.cvlaminck.gradle.versioning-java"
+
+versioning {
+    defaultVersion "1.0"
+    versions {
+        unstable {
+
+        }
+    }
+}

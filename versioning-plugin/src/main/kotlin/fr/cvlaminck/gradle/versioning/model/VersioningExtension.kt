@@ -10,5 +10,5 @@ interface VersioningExtension {
 
     val versions: VersionContainer
 
-    fun versions(action: Action<out VersionContainer>)
+    fun versions(configure: Action<in VersionContainer>)
 }

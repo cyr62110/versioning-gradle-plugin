@@ -2,13 +2,22 @@ package fr.cvlaminck.gradle.versioning.model
 
 import org.gradle.api.Action
 
+/**
+ *
+ */
 interface VersioningExtension {
 
     val defaultVersion: String
 
     fun defaultVersion(version: String)
 
-    val versions: VersionTemplateContainer
+    /**
+     * Container of all registered [VersionTemplate].
+     */
+    val templateContainer: VersionTemplateContainer
 
-    fun versions(configure: Action<in VersionTemplateContainer>)
+    /**
+     * Register new templates.
+     */
+    fun templates(configure: Action<in VersionTemplateContainer>)
 }

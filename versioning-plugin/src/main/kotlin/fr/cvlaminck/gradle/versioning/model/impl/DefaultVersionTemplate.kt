@@ -6,9 +6,12 @@ open class DefaultVersionTemplate(
         private val _name: String
 ) : VersionTemplate {
 
-    val _branchPatterns = mutableListOf<String>()
+    private var _template: String? = null
 
-    
+    private val _branchPatterns = mutableListOf<String>()
+
+    override val template: String
+        get() = _template!!
 
     override val branchPatterns: Collection<String>
         get() = _branchPatterns.toList()

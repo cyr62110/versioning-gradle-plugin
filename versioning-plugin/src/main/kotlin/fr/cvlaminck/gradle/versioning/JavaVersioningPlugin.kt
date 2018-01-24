@@ -1,6 +1,8 @@
 package fr.cvlaminck.gradle.versioning
 
 import fr.cvlaminck.gradle.versioning.factory.VersionFactory
+import fr.cvlaminck.gradle.versioning.manager.VcsInformationExtractorManager
+import fr.cvlaminck.gradle.versioning.manager.VersionTemplateSelector
 import fr.cvlaminck.gradle.versioning.model.impl.DefaultVersioningExtension
 import fr.cvlaminck.gradle.versioning.model.VersionTemplate
 import fr.cvlaminck.gradle.versioning.model.VersioningExtension
@@ -18,6 +20,8 @@ open class JavaVersioningPlugin @Inject constructor(
 ) : Plugin<Project> {
 
     private val versionFactory = VersionFactory(instantiator)
+    private val versionTemplateSelector = VersionTemplateSelector()
+    private val vcsInformationExtractorManager = VcsInformationExtractorManager()
 
     override fun apply(project: Project) {
         val versioningExtension = registerAndConfigureVersioningExtension(project)
@@ -32,7 +36,7 @@ open class JavaVersioningPlugin @Inject constructor(
                 DefaultVersioningExtension::class.java,
                 versionContainer)
         project.extensions.configure(VersioningExtension::class.java) {
-            it.versions.registerFactory(VersionTemplate::class.java, versionFactory)
+            it.templateContainer.registerFactory(VersionTemplate::class.java, versionFactory)
         }
         return versioningExtension
     }

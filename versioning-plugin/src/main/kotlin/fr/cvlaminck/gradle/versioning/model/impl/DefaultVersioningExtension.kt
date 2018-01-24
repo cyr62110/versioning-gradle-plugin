@@ -5,7 +5,7 @@ import fr.cvlaminck.gradle.versioning.model.VersioningExtension
 import org.gradle.api.Action
 
 open class DefaultVersioningExtension constructor(
-        override val versions: VersionTemplateContainer
+        override val templateContainer: VersionTemplateContainer
 ) : VersioningExtension {
 
     private var _defaultVersion: String? = null
@@ -16,7 +16,7 @@ open class DefaultVersioningExtension constructor(
         _defaultVersion = version
     }
 
-    override fun versions(configure: Action<in VersionTemplateContainer>) {
-        configure.execute(versions)
+    override fun templates(configure: Action<in VersionTemplateContainer>) {
+        configure.execute(templateContainer)
     }
 }

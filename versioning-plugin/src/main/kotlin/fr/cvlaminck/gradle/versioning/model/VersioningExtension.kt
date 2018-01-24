@@ -8,7 +8,7 @@ interface VersioningExtension {
 
     fun defaultVersion(version: String)
 
-    val versions: VersionContainer
+    val versions: VersionTemplateContainer
 
-    fun versions(configure: Action<in VersionContainer>)
+    fun versions(configure: Action<in VersionTemplateContainer>)
 }

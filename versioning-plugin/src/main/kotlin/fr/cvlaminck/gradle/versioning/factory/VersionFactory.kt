@@ -1,19 +1,18 @@
 package fr.cvlaminck.gradle.versioning.factory
 
-import fr.cvlaminck.gradle.versioning.JavaVersioningPlugin
-import fr.cvlaminck.gradle.versioning.model.Version
-import fr.cvlaminck.gradle.versioning.model.impl.DefaultVersion
+import fr.cvlaminck.gradle.versioning.model.VersionTemplate
+import fr.cvlaminck.gradle.versioning.model.impl.DefaultVersionTemplate
 import org.gradle.api.NamedDomainObjectFactory
 import org.gradle.internal.reflect.Instantiator
 import org.slf4j.LoggerFactory
 
 open class VersionFactory(
         private val instantiator: Instantiator
-) : NamedDomainObjectFactory<Version> {
+) : NamedDomainObjectFactory<VersionTemplate> {
 
-    override fun create(name: String): Version {
+    override fun create(name: String): VersionTemplate {
         log.debug("Creating version '{}'.", name)
-        return instantiator.newInstance(DefaultVersion::class.java, name)
+        return instantiator.newInstance(DefaultVersionTemplate::class.java, name)
     }
 
     companion object {

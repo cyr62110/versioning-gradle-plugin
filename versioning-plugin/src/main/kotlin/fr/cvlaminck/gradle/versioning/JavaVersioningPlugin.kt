@@ -2,9 +2,9 @@ package fr.cvlaminck.gradle.versioning
 
 import fr.cvlaminck.gradle.versioning.factory.VersionFactory
 import fr.cvlaminck.gradle.versioning.model.impl.DefaultVersioningExtension
-import fr.cvlaminck.gradle.versioning.model.Version
+import fr.cvlaminck.gradle.versioning.model.VersionTemplate
 import fr.cvlaminck.gradle.versioning.model.VersioningExtension
-import fr.cvlaminck.gradle.versioning.model.impl.DefaultVersionContainer
+import fr.cvlaminck.gradle.versioning.model.impl.DefaultVersionTemplateContainer
 import fr.cvlaminck.gradle.versioning.task.JavaSetVersionTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -25,14 +25,14 @@ open class JavaVersioningPlugin @Inject constructor(
     }
 
     private fun registerAndConfigureVersioningExtension(project: Project): VersioningExtension {
-        val versionContainer = instantiator.newInstance(DefaultVersionContainer::class.java, instantiator)
+        val versionContainer = instantiator.newInstance(DefaultVersionTemplateContainer::class.java, instantiator)
         val versioningExtension = project.extensions.create(
                 VersioningExtension::class.java,
                 VERSIONING_EXTENSION,
                 DefaultVersioningExtension::class.java,
                 versionContainer)
         project.extensions.configure(VersioningExtension::class.java) {
-            it.versions.registerFactory(Version::class.java, versionFactory)
+            it.versions.registerFactory(VersionTemplate::class.java, versionFactory)
         }
         return versioningExtension
     }

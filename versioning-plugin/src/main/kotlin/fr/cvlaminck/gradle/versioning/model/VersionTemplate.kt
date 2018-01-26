@@ -20,4 +20,8 @@ interface VersionTemplate : Named {
      * Template used to generate the version name.
      */
     val template: String
+
+    fun template(template: String)
+
+    fun branchPatterns(vararg branchPatterns: String)
 }

@@ -20,8 +20,8 @@ open class JavaVersioningPlugin @Inject constructor(
 ) : Plugin<Project> {
 
     private val versionFactory = VersionFactory(instantiator)
-    private val versionTemplateSelector = VersionTemplateSelector()
     private val vcsInformationExtractorManager = VcsInformationExtractorManager()
+    private val versionTemplateSelector = VersionTemplateSelector()
 
     override fun apply(project: Project) {
         val versioningExtension = registerAndConfigureVersioningExtension(project)
@@ -43,7 +43,8 @@ open class JavaVersioningPlugin @Inject constructor(
 
     private fun afterJavaPluginApplied(project: Project, versioningExtension: VersioningExtension) {
         val jarTask: Task? = project.tasks.getByName("jar")
-        val setVersionTask = project.tasks.create(SET_VERSION_TASK, JavaSetVersionTask::class.java)
+        val setVersionTask = JavaSetVersionTask.create(project, SET_VERSION_TASK, versioningExtension,
+                versionTemplateSelector, vcsInformationExtractorManager)
         jarTask?.dependsOn(setVersionTask)
     }
 

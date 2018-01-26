@@ -19,4 +19,16 @@ open class DefaultVersionTemplate(
     override fun getName(): String {
         return _name
     }
+
+    override fun template(template: String) {
+        _template = template
+    }
+
+    override fun branchPatterns(vararg branchPatterns: String) {
+        _branchPatterns.addAll(branchPatterns)
+    }
+
+    override fun toString(): String {
+        return template
+    }
 }

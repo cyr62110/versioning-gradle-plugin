@@ -14,9 +14,14 @@ apply plugin: "fr.cvlaminck.gradle.versioning-java"
 
 versioning {
     defaultVersion "1.0"
-    versions {
+    templates {
         unstable {
-
+            template "{{defaultVersion}}-UNSTABLE-{{date:YYYY-mm-dd}}"
+            branchPatterns ["develop"]
+        }
+        release {
+            template "{{defaultVersion}}"
+            branchPatterns ["master"]
         }
     }
 }

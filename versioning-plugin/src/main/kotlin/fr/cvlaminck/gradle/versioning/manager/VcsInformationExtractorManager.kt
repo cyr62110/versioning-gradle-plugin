@@ -15,9 +15,8 @@ class VcsInformationExtractorManager @Inject constructor(
 ) {
 
     fun extractInformation(project: Project): VcsInformation {
-        val path = Paths.get(project.path)
-        val extractor = extractors.filter { it.isRepository(path) }
-                .firstOrNull() ?: throw VersioningPluginException("No vcs can be found in directory: $path")
+        val path = project.projectDir.toPath()
+        val extractor = extractors.firstOrNull { it.isRepository(path) } ?: throw VersioningPluginException("No vcs can be found in directory: $path")
         return extractor.extractInformation(path)
     }
 }

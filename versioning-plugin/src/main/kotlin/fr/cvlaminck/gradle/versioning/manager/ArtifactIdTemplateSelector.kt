@@ -1,7 +1,7 @@
 package fr.cvlaminck.gradle.versioning.manager
 
 import fr.cvlaminck.gradle.versioning.model.VcsInformation
-import fr.cvlaminck.gradle.versioning.model.VersionTemplate
+import fr.cvlaminck.gradle.versioning.model.ArtifactIdTemplate
 import fr.cvlaminck.gradle.versioning.model.VersioningExtension
 
 /**
@@ -13,19 +13,19 @@ import fr.cvlaminck.gradle.versioning.model.VersioningExtension
  *
  * If multiple templates are eligible, the first one that has been registered will be selected.
  */
-class VersionTemplateSelector {
+class ArtifactIdTemplateSelector {
 
-    fun selectBestEligibleTemplate(versioningExtension: VersioningExtension, vcsInformation: VcsInformation): VersionTemplate? {
+    fun selectBestEligibleTemplate(versioningExtension: VersioningExtension, vcsInformation: VcsInformation): ArtifactIdTemplate? {
         val templates = findAllEligibleTemplates(versioningExtension, vcsInformation)
         return templates.firstOrNull()
     }
 
-    private fun findAllEligibleTemplates(versioningExtension: VersioningExtension, vcsInformation: VcsInformation): List<VersionTemplate> {
+    private fun findAllEligibleTemplates(versioningExtension: VersioningExtension, vcsInformation: VcsInformation): List<ArtifactIdTemplate> {
         return versioningExtension.templateContainer
                 .filter { isAtLeastOneBranchPatternMatches(it, vcsInformation) }
     }
 
-    private fun isAtLeastOneBranchPatternMatches(versionTemplate: VersionTemplate, vcsInformation: VcsInformation): Boolean
+    private fun isAtLeastOneBranchPatternMatches(versionTemplate: ArtifactIdTemplate, vcsInformation: VcsInformation): Boolean
             = versionTemplate.branchPatterns
             .map(String::toRegex)
             .any { vcsInformation.branchName.matches(it) }

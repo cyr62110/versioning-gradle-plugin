@@ -8,12 +8,14 @@ buildscript {
     dependencies {
         classpath "fr.cvlaminck.gradle:versioning-plugin:1.0"
     }
+    configurations.all {
+        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    }
 }
 
-apply plugin: "fr.cvlaminck.gradle.versioning-java"
+apply plugin: "fr.cvlaminck.gradle.versioning"
 
 versioning {
-    defaultVersion "1.0"
     templates {
         unstable {
             template "{{defaultVersion}}-UNSTABLE-{{date:YYYY-mm-dd}}"

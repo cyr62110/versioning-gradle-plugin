@@ -32,7 +32,10 @@ class GitInformationExtractor : VcsInformationExtractor {
     @Throws(RepositoryNotFoundException::class)
     private fun openRepository(path: Path): Repository {
         val builder = RepositoryBuilder()
-        builder.findGitDir(path.toFile()) ?: throw RepositoryNotFoundException(name, path)
+        builder.findGitDir(path.toFile())
+        if (builder.gitDir == null) {
+            throw RepositoryNotFoundException(name, path)
+        }
         return builder.build()
     }
 }

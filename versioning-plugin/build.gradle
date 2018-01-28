@@ -7,13 +7,14 @@ version '1.0'
 
 dependencies {
     compile 'org.eclipse.jgit:org.eclipse.jgit:4.10.0.201712302008-r'
+    compile 'com.github.spullara.mustache.java:compiler:0.9.5'
 }
 
 gradlePlugin {
     plugins {
-        versioningJava {
-            id = 'fr.cvlaminck.gradle.versioning-java'
-            implementationClass = 'fr.cvlaminck.gradle.versioning.JavaVersioningPlugin'
+        versioning {
+            id = 'fr.cvlaminck.gradle.versioning'
+            implementationClass = 'fr.cvlaminck.gradle.versioning.VersioningPlugin'
         }
     }
 }

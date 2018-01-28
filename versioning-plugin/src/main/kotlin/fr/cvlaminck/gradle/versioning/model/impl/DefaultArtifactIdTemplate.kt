@@ -1,10 +1,10 @@
 package fr.cvlaminck.gradle.versioning.model.impl
 
-import fr.cvlaminck.gradle.versioning.model.VersionTemplate
+import fr.cvlaminck.gradle.versioning.model.ArtifactIdTemplate
 
-open class DefaultVersionTemplate(
+open class DefaultArtifactIdTemplate(
         private val _name: String
-) : VersionTemplate {
+) : ArtifactIdTemplate {
 
     private var _template: String? = null
 

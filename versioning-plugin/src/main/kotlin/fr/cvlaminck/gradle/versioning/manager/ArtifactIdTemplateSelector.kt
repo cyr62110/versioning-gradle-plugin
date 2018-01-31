@@ -3,6 +3,7 @@ package fr.cvlaminck.gradle.versioning.manager
 import fr.cvlaminck.gradle.versioning.model.VcsInformation
 import fr.cvlaminck.gradle.versioning.model.ArtifactIdTemplate
 import fr.cvlaminck.gradle.versioning.model.VersioningExtension
+import org.slf4j.LoggerFactory
 
 /**
  * Manager performing the selection of the template to use to generate the version name.
@@ -16,17 +17,22 @@ import fr.cvlaminck.gradle.versioning.model.VersioningExtension
 class ArtifactIdTemplateSelector {
 
     fun selectBestEligibleTemplate(versioningExtension: VersioningExtension, vcsInformation: VcsInformation): ArtifactIdTemplate? {
-        val templates = findAllEligibleTemplates(versioningExtension, vcsInformation)
+        log.debug("Templates: {}", versioningExtension.templateContainer.toList())
+        val templates = findAllEligibleTemplates(
+                versioningExtension.templateContainer.asSequence(),
+                vcsInformation)
         return templates.firstOrNull()
     }
 
-    private fun findAllEligibleTemplates(versioningExtension: VersioningExtension, vcsInformation: VcsInformation): List<ArtifactIdTemplate> {
-        return versioningExtension.templateContainer
-                .filter { isAtLeastOneBranchPatternMatches(it, vcsInformation) }
-    }
+    internal fun findAllEligibleTemplates(templates: Sequence<ArtifactIdTemplate>, vcsInformation: VcsInformation): Sequence<ArtifactIdTemplate>
+        = templates.filter { isAtLeastOneBranchPatternMatches(it, vcsInformation) }
 
-    private fun isAtLeastOneBranchPatternMatches(versionTemplate: ArtifactIdTemplate, vcsInformation: VcsInformation): Boolean
-            = versionTemplate.branchPatterns
+    internal fun isAtLeastOneBranchPatternMatches(template: ArtifactIdTemplate, vcsInformation: VcsInformation): Boolean
+            = template.branchPatterns
             .map(String::toRegex)
             .any { vcsInformation.branchName.matches(it) }
+
+    companion object {
+        private val log = LoggerFactory.getLogger(ArtifactIdTemplateSelector::class.java)
+    }
 }

@@ -19,11 +19,11 @@ versioning {
     templates {
         unstable {
             template "{{defaultVersion}}-UNSTABLE-{{date:YYYY-mm-dd}}"
-            branchPatterns ["develop"]
+            branchPatterns "develop"
         }
         release {
             template "{{defaultVersion}}"
-            branchPatterns ["master"]
+            branchPatterns "master"
         }
     }
 }

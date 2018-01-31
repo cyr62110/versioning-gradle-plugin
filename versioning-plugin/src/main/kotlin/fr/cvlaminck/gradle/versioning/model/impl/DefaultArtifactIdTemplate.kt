@@ -29,6 +29,6 @@ open class DefaultArtifactIdTemplate(
     }
 
     override fun toString(): String {
-        return template
+        return "DefaultArtifactIdTemplate(name=$name, template=$_template, branchPatterns=$_branchPatterns)"
     }
 }

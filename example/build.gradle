@@ -14,15 +14,31 @@ buildscript {
 }
 
 apply plugin: "fr.cvlaminck.gradle.versioning"
+apply plugin: "maven-publish"
+
+version = "1.0"
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            url "$rootProject.buildDir/repo"
+        }
+    }
+}
 
 versioning {
     templates {
         unstable {
-            template "{{defaultVersion}}-UNSTABLE-{{date:YYYY-mm-dd}}"
+            template "{{version}}-UNSTABLE-{{date:YYYY-mm-dd}}"
             branchPatterns "develop"
         }
         release {
-            template "{{defaultVersion}}"
+            template "{{version}}-RELEASE"
             branchPatterns "master"
         }
     }

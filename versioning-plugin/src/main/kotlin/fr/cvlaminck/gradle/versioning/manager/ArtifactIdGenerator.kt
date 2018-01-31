@@ -31,7 +31,14 @@ class ArtifactIdGenerator {
 
     private fun getScopes(project: Project, versioningExtension: VersioningExtension): Map<String, Any> {
         // FIXME Set scopes to get ext, version, group, name, version from project
+        return getProjectScopes(project)
+    }
+
+    private fun getProjectScopes(project: Project): Map<String, Any> {
         return mapOf(
+                "version" to project.version,
+                "group" to project.group,
+                "name" to project.name
         )
     }
 }

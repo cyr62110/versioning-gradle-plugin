@@ -1,12 +1,11 @@
 package fr.cvlaminck.gradle.versioning.manager.updater
 
+import fr.cvlaminck.gradle.versioning.model.ArtifactIdTemplate
 import org.gradle.api.Project
 
-class ProjectArtifactIdUpdater(
-        private val project: Project
-) : ArtifactIdUpdater {
+class ProjectArtifactIdUpdater : ArtifactIdUpdater {
 
-    override fun updateArtifactId(group: String?, name: String?, version: String?) {
+    override fun updateArtifactId(project: Project, template: ArtifactIdTemplate, group: String?, name: String?, version: String?) {
         if (group != null) {
             project.group = group
         }

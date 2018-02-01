@@ -17,10 +17,12 @@ apply plugin: "fr.cvlaminck.gradle.versioning"
 apply plugin: "maven-publish"
 
 version = "1.0"
+group = "fr.cvlaminck.gradle"
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
+            group "fr.cvlaminck.gradle"
             from components.java
         }
     }
@@ -40,6 +42,7 @@ versioning {
         release {
             template "{{version}}-RELEASE"
             branchPatterns "master"
+            publications "mavenJava"
         }
     }
 }

@@ -37,7 +37,7 @@ open class UpdateArtifactIdTask : DefaultTask() {
         }
         log.info("Generated artifact id: {}", artifactId)
 
-        artifactIdUpdaterManager.updateArtifactId("", "", artifactId.version) // FIXME Implements name and group
+        artifactIdUpdaterManager.updateArtifactId(project, template,null, null, artifactId.version) // FIXME Implements name and group
     }
 
     companion object {

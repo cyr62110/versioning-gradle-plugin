@@ -17,11 +17,18 @@ interface ArtifactIdTemplate : Named {
     val branchPatterns: Collection<String>
 
     /**
+     * Collection of name of publications that we must update the version using this template.
+     */
+    val publicationNames: Collection<String>
+
+    /**
      * Template used to generate the version name.
      */
     val template: String
 
     fun template(template: String)
+
+    fun publications(vararg publicationNames: String)
 
     fun branchPatterns(vararg branchPatterns: String)
 }

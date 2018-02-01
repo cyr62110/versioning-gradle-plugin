@@ -5,6 +5,7 @@ import fr.cvlaminck.gradle.versioning.manager.ArtifactIdUpdaterManager
 import fr.cvlaminck.gradle.versioning.manager.VcsInformationExtractorManager
 import fr.cvlaminck.gradle.versioning.manager.ArtifactIdGenerator
 import fr.cvlaminck.gradle.versioning.manager.ArtifactIdTemplateSelector
+import fr.cvlaminck.gradle.versioning.manager.updater.MavenPublicationArtifactIdUpdater
 import fr.cvlaminck.gradle.versioning.manager.updater.ProjectArtifactIdUpdater
 import fr.cvlaminck.gradle.versioning.model.impl.DefaultVersioningExtension
 import fr.cvlaminck.gradle.versioning.model.ArtifactIdTemplate
@@ -30,8 +31,9 @@ open class VersioningPlugin @Inject constructor(
 
     override fun apply(project: Project) {
         val versioningExtension = registerAndConfigureVersioningExtension(project)
-        artifactIdUpdaterManager.register(ProjectArtifactIdUpdater(project))
+        artifactIdUpdaterManager.register(ProjectArtifactIdUpdater())
         project.pluginManager.withPlugin("java") { afterJavaPluginApplied(project, versioningExtension) }
+        project.pluginManager.withPlugin("maven-publish") { afterMavenPublishPluginApplied(project, versioningExtension) }
     }
 
     private fun registerAndConfigureVersioningExtension(project: Project): VersioningExtension {
@@ -52,6 +54,10 @@ open class VersioningPlugin @Inject constructor(
         val setVersionTask = UpdateArtifactIdTask.create(project, UPDATE_ARTIFACT_ID_TASK, versioningExtension,
                 versionTemplateSelector, vcsInformationExtractorManager, artifactIdGenerator, artifactIdUpdaterManager)
         jarTask?.dependsOn(setVersionTask)
+    }
+
+    private fun afterMavenPublishPluginApplied(project: Project, versioningExtension: VersioningExtension) {
+        artifactIdUpdaterManager.register(MavenPublicationArtifactIdUpdater())
     }
 
     companion object {

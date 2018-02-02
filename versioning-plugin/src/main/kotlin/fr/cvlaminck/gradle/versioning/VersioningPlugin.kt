@@ -12,10 +12,15 @@ import fr.cvlaminck.gradle.versioning.model.ArtifactIdTemplate
 import fr.cvlaminck.gradle.versioning.model.VersioningExtension
 import fr.cvlaminck.gradle.versioning.model.impl.DefaultArtifactIdTemplateContainer
 import fr.cvlaminck.gradle.versioning.task.UpdateArtifactIdTask
+import fr.cvlaminck.gradle.versioning.task.VersioningTasks
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.internal.reflect.Instantiator
+import org.gradle.model.ModelMap
+import org.gradle.model.Mutate
+import org.gradle.model.Path
+import org.gradle.model.RuleSource
 import org.slf4j.LoggerFactory
 import javax.inject.Inject
 
@@ -31,9 +36,9 @@ open class VersioningPlugin @Inject constructor(
 
     override fun apply(project: Project) {
         val versioningExtension = registerAndConfigureVersioningExtension(project)
-        artifactIdUpdaterManager.register(ProjectArtifactIdUpdater())
-        project.pluginManager.withPlugin("java") { afterJavaPluginApplied(project, versioningExtension) }
-        project.pluginManager.withPlugin("maven-publish") { afterMavenPublishPluginApplied(project, versioningExtension) }
+        val tasks = registerTasks(project, versioningExtension)
+        project.pluginManager.withPlugin("java") { afterJavaPluginApplied(project, tasks, versioningExtension) }
+        project.pluginManager.withPlugin("maven-publish") { afterMavenPublishPluginApplied(project, tasks, versioningExtension) }
     }
 
     private fun registerAndConfigureVersioningExtension(project: Project): VersioningExtension {
@@ -49,15 +54,30 @@ open class VersioningPlugin @Inject constructor(
         return versioningExtension
     }
 
-    private fun afterJavaPluginApplied(project: Project, versioningExtension: VersioningExtension) {
-        val jarTask: Task? = project.tasks.getByName("jar")
-        val setVersionTask = UpdateArtifactIdTask.create(project, UPDATE_ARTIFACT_ID_TASK, versioningExtension,
+    private fun registerTasks(project: Project, versioningExtension: VersioningExtension): VersioningTasks {
+        val updateArtifactIdTask = UpdateArtifactIdTask.create(project, UPDATE_ARTIFACT_ID_TASK, versioningExtension,
                 versionTemplateSelector, vcsInformationExtractorManager, artifactIdGenerator, artifactIdUpdaterManager)
-        jarTask?.dependsOn(setVersionTask)
+        return VersioningTasks(
+                updateArtifactIdTask
+        )
     }
 
-    private fun afterMavenPublishPluginApplied(project: Project, versioningExtension: VersioningExtension) {
+    private fun afterJavaPluginApplied(project: Project, tasks: VersioningTasks, versioningExtension: VersioningExtension) {
+        artifactIdUpdaterManager.register(ProjectArtifactIdUpdater())
+        val jarTask: Task? = project.tasks.getByName("jar")
+        jarTask?.dependsOn(tasks.udpateArtifactIdTask)
+    }
+
+    private fun afterMavenPublishPluginApplied(project: Project , tasks: VersioningTasks, versioningExtension: VersioningExtension) {
         artifactIdUpdaterManager.register(MavenPublicationArtifactIdUpdater())
+    }
+
+    open inner class Rules : RuleSource() {
+
+        @Mutate
+        fun realizePublishingTasks(tasks: ModelMap<Task>) {
+            log.debug("tasks: ${tasks}")
+        }
     }
 
     companion object {

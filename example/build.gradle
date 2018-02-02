@@ -13,7 +13,6 @@ buildscript {
     }
 }
 
-apply plugin: "fr.cvlaminck.gradle.versioning"
 apply plugin: "maven-publish"
 
 version = "1.0"
@@ -32,6 +31,8 @@ publishing {
         }
     }
 }
+
+apply plugin: "fr.cvlaminck.gradle.versioning"
 
 versioning {
     templates {

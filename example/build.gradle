@@ -13,10 +13,10 @@ buildscript {
     }
 }
 
-apply plugin: "maven-publish"
-
 version = "1.0"
 group = "fr.cvlaminck.gradle"
+
+apply plugin: "maven-publish"
 
 publishing {
     publications {

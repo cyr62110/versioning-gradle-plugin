@@ -1,25 +1,27 @@
 package fr.cvlaminck.gradle.versioning
 
 import fr.cvlaminck.gradle.versioning.factory.VersionFactory
-import fr.cvlaminck.gradle.versioning.manager.ArtifactIdUpdaterManager
-import fr.cvlaminck.gradle.versioning.manager.VcsInformationExtractorManager
 import fr.cvlaminck.gradle.versioning.manager.ArtifactIdGenerator
 import fr.cvlaminck.gradle.versioning.manager.ArtifactIdTemplateSelector
+import fr.cvlaminck.gradle.versioning.manager.ArtifactIdUpdaterManager
+import fr.cvlaminck.gradle.versioning.manager.VcsInformationExtractorManager
 import fr.cvlaminck.gradle.versioning.manager.updater.MavenPublicationArtifactIdUpdater
 import fr.cvlaminck.gradle.versioning.manager.updater.ProjectArtifactIdUpdater
-import fr.cvlaminck.gradle.versioning.model.impl.DefaultVersioningExtension
 import fr.cvlaminck.gradle.versioning.model.ArtifactIdTemplate
 import fr.cvlaminck.gradle.versioning.model.VersioningExtension
 import fr.cvlaminck.gradle.versioning.model.impl.DefaultArtifactIdTemplateContainer
+import fr.cvlaminck.gradle.versioning.model.impl.DefaultVersioningExtension
 import fr.cvlaminck.gradle.versioning.task.UpdateArtifactIdTask
 import fr.cvlaminck.gradle.versioning.task.VersioningTasks
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
+import org.gradle.api.plugins.ExtensionContainer
+import org.gradle.api.publish.PublishingExtension
 import org.gradle.internal.reflect.Instantiator
+import org.gradle.model.Model
 import org.gradle.model.ModelMap
 import org.gradle.model.Mutate
-import org.gradle.model.Path
 import org.gradle.model.RuleSource
 import org.slf4j.LoggerFactory
 import javax.inject.Inject
@@ -37,8 +39,8 @@ open class VersioningPlugin @Inject constructor(
     override fun apply(project: Project) {
         val versioningExtension = registerAndConfigureVersioningExtension(project)
         val tasks = registerTasks(project, versioningExtension)
-        project.pluginManager.withPlugin("java") { afterJavaPluginApplied(project, tasks, versioningExtension) }
-        project.pluginManager.withPlugin("maven-publish") { afterMavenPublishPluginApplied(project, tasks, versioningExtension) }
+        project.pluginManager.withPlugin("java") { afterJavaPluginApplied(project, tasks) }
+        project.pluginManager.withPlugin("maven-publish") { afterMavenPublishPluginApplied() }
     }
 
     private fun registerAndConfigureVersioningExtension(project: Project): VersioningExtension {
@@ -62,21 +64,47 @@ open class VersioningPlugin @Inject constructor(
         )
     }
 
-    private fun afterJavaPluginApplied(project: Project, tasks: VersioningTasks, versioningExtension: VersioningExtension) {
+    private fun afterJavaPluginApplied(project: Project, tasks: VersioningTasks) {
         artifactIdUpdaterManager.register(ProjectArtifactIdUpdater())
         val jarTask: Task? = project.tasks.getByName("jar")
         jarTask?.dependsOn(tasks.udpateArtifactIdTask)
     }
 
-    private fun afterMavenPublishPluginApplied(project: Project , tasks: VersioningTasks, versioningExtension: VersioningExtension) {
+    private fun afterMavenPublishPluginApplied() {
         artifactIdUpdaterManager.register(MavenPublicationArtifactIdUpdater())
     }
 
-    open inner class Rules : RuleSource() {
+    /**
+     * As maven-publish is a model-based plugin, we need to use a RuleSource to modify the generatePom* tasks generated
+     * by the model [PublishingExtension].
+     */
+    open class Rules : RuleSource() {
 
+        @Model
+        fun versioning(extensions: ExtensionContainer): VersioningExtension = extensions.getByType(VersioningExtension::class.java)
+
+        /**
+         * Find the generatePom* tasks for each publication targeted in the versioning extension and add a dependency to
+         * the [UpdateArtifactIdTask] so we can be sure that the version in the pom file is updated.
+         */
         @Mutate
-        fun realizePublishingTasks(tasks: ModelMap<Task>) {
-            log.debug("tasks: ${tasks}")
+        fun realizePublishingTasks(tasks: ModelMap<Task>, versioningExtension: VersioningExtension, extensions: ExtensionContainer) {
+            val publishingExtension: PublishingExtension = extensions.findByType(PublishingExtension::class.java)
+                    ?: return
+
+            val updateArtifactIdTask = tasks.get(UPDATE_ARTIFACT_ID_TASK)
+            versioningExtension.templateContainer
+                    .filter { it.publicationNames.isNotEmpty() }
+                    .flatMap { template -> template.publicationNames.map { template to it } }
+                    .forEach { pair ->
+                        if (publishingExtension.publications.any { it.name == pair.second }) {
+                            val generatePomTaskName = "generatePomFileFor${pair.second.capitalize()}Publication"
+                            val generatePomTask: Task = tasks.get(generatePomTaskName)
+                            generatePomTask.dependsOn(updateArtifactIdTask)
+                        } else {
+                            log.warn("No matching publication '${pair.second}' found for template '${pair.first.name}'.")
+                        }
+                    }
         }
     }
 

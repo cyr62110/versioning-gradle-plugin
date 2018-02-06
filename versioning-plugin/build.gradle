@@ -1,28 +1,46 @@
 plugins {
-    id 'java-gradle-plugin'
-    id 'maven-publish'
+    id "java-gradle-plugin"
+    id "maven-publish"
 }
+apply plugin: "com.jfrog.bintray"
 
-version '1.0'
+version "1.0"
 
 dependencies {
-    compile 'org.eclipse.jgit:org.eclipse.jgit:4.10.0.201712302008-r'
-    compile 'com.github.spullara.mustache.java:compiler:0.9.5'
+    compile "org.eclipse.jgit:org.eclipse.jgit:4.10.0.201712302008-r"
+    compile "com.github.spullara.mustache.java:compiler:0.9.5"
 }
 
 gradlePlugin {
     plugins {
         versioning {
-            id = 'fr.cvlaminck.gradle.versioning'
-            implementationClass = 'fr.cvlaminck.gradle.versioning.VersioningPlugin'
+            id = "fr.cvlaminck.gradle.versioning"
+            implementationClass = "fr.cvlaminck.gradle.versioning.VersioningPlugin"
+        }
+    }
+    automatedPublishing = false
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+publishing {
+    publications {
+        pluginMaven(MavenPublication) {
+            from components.java
+            artifact sourcesJar
         }
     }
 }
 
-publishing {
-    repositories {
-        maven {
-            url "$rootProject.buildDir/repo"
-        }
+bintray {
+    user = "$bintrayUser"
+    key = "$bintrayKey"
+    pkg {
+        repo = "maven"
+        name = "versioning-gradle-plugin"
+        publications = ["pluginMaven"]
     }
 }

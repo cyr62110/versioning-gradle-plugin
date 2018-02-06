@@ -6,6 +6,7 @@ out/
 # Gradle
 build/
 /\.gradle
+gradle.properties
 
 # Java
 *.class

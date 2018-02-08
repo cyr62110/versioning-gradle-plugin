@@ -10,7 +10,7 @@ import java.nio.file.attribute.BasicFileAttributes
 
 class TempDirectoryExtension : AfterEachCallback, ParameterResolver {
 
-    @Target(AnnotationTarget.PROPERTY)
+    @Target(AnnotationTarget.VALUE_PARAMETER)
     @Retention(AnnotationRetention.RUNTIME)
     @MustBeDocumented
     annotation class Root
@@ -40,7 +40,7 @@ class TempDirectoryExtension : AfterEachCallback, ParameterResolver {
 
     private fun createTempDirectory(context: ExtensionContext): Path {
         try {
-            return Files.createTempDirectory(context.uniqueId)
+            return Files.createTempDirectory(KEY)
         } catch (e: IOException) {
             throw ParameterResolutionException("Could not create temp directory", e)
         }

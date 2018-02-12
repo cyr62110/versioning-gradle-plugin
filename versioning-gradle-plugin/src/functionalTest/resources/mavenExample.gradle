@@ -1,22 +1,8 @@
-buildscript {
-    repositories {
-        jcenter()
-        maven {
-            url "$rootProject.buildDir/repo"
-        }
-    }
-    dependencies {
-        classpath "fr.cvlaminck.gradle:versioning-plugin:1.0"
-    }
-    configurations.all {
-        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-    }
-}
-
 version = "1.0"
 group = "fr.cvlaminck.gradle"
 
 apply plugin: "maven-publish"
+apply plugin: "fr.cvlaminck.gradle.versioning"
 
 publishing {
     publications {
@@ -32,12 +18,10 @@ publishing {
     }
 }
 
-apply plugin: "fr.cvlaminck.gradle.versioning"
-
 versioning {
     templates {
         unstable {
-            template "{{version}}-UNSTABLE-{{date:YYYY-mm-dd}}"
+            template "{{version}}-UNSTABLE"
             branchPatterns "develop"
         }
         release {

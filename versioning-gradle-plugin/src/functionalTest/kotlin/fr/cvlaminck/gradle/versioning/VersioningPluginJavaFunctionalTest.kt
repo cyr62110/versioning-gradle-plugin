@@ -9,19 +9,18 @@ import org.junit.jupiter.api.extension.ExtendWith
 import java.nio.file.Path
 
 @ExtendWith(TempDirectoryExtension::class)
-internal class VersioningPluginSimpleJavaFunctionalTest : VersioningPluginFunctionalTest() {
+internal class VersioningPluginJavaFunctionalTest : VersioningPluginFunctionalTest() {
 
     @Test
-    fun simpleJava(
+    fun assembleMaster(
             @TempDirectoryExtension.Root projectDir: Path
     ) {
-        println(projectDir)
-        prepareProject(projectDir, "simpleHelloWorld.gradle")
+        prepareProject(projectDir, "javaExample.gradle")
 
         val result = GradleRunner.create()
                 .withProjectDir(projectDir.toFile())
                 .withArguments("assemble")
-                // FIXME .withPluginClasspath()
+                .withPluginClasspath()
                 .build()
 
         assertTrue(result.task(":assemble").outcome == TaskOutcome.SUCCESS)

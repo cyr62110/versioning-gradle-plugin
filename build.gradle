@@ -31,8 +31,8 @@ subprojects {
     group "fr.cvlaminck.gradle"
 
     ext {
-        bintrayUser = project.property('bintray.user')
-        bintrayKey = project.property('bintray.key')
+        bintrayUser = project.property('bintrayUser')
+        bintrayKey = project.property('bintrayKey')
     }
 
     repositories {

@@ -32,8 +32,8 @@ internal class VersioningPluginJavaFunctionalTest : VersioningPluginFunctionalTe
 
         val libsPath = projectDir.resolve(Paths.get("build", "libs", "${projectDir.fileName}-1.0-RELEASE.jar"))
 
-        assertTrue(result.task(":updateArtifactId").outcome == TaskOutcome.SUCCESS)
-        assertTrue(result.task(":assemble").outcome == TaskOutcome.SUCCESS)
+        assertTrue(result.task(":updateArtifactId")!!.outcome == TaskOutcome.SUCCESS)
+        assertTrue(result.task(":assemble")!!.outcome == TaskOutcome.SUCCESS)
         assertTrue(Files.exists(libsPath))
     }
 
@@ -61,8 +61,8 @@ internal class VersioningPluginJavaFunctionalTest : VersioningPluginFunctionalTe
 
         val libsPath = projectDir.resolve(Paths.get("build", "libs", "${projectDir.fileName}-1.0-SNAPSHOT.jar"))
 
-        assertTrue(result.task(":updateArtifactId").outcome == TaskOutcome.SUCCESS)
-        assertTrue(result.task(":assemble").outcome == TaskOutcome.SUCCESS)
+        assertTrue(result.task(":updateArtifactId")!!.outcome == TaskOutcome.SUCCESS)
+        assertTrue(result.task(":assemble")!!.outcome == TaskOutcome.SUCCESS)
         assertTrue(Files.exists(libsPath))
     }
 }

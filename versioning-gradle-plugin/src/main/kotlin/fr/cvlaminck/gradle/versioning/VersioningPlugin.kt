@@ -99,7 +99,7 @@ open class VersioningPlugin @Inject constructor(
                     .forEach { pair ->
                         if (publishingExtension.publications.any { it.name == pair.second }) {
                             val generatePomTaskName = "generatePomFileFor${pair.second.capitalize()}Publication"
-                            val generatePomTask: Task = tasks.get(generatePomTaskName)
+                            val generatePomTask = tasks.get(generatePomTaskName) as Task
                             generatePomTask.dependsOn(updateArtifactIdTask)
                         } else {
                             log.warn("No matching publication '${pair.second}' found for template '${pair.first.name}'.")

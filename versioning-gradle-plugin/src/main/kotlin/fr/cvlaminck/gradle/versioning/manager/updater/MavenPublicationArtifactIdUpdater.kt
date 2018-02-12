@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory
 class MavenPublicationArtifactIdUpdater : ArtifactIdUpdater {
 
     override fun updateArtifactId(project: Project, template: ArtifactIdTemplate, group: String?, name: String?, version: String?) {
-        val publishingExtension = project.extensions.findByType(PublishingExtension::class.java)
+        val publishingExtension = project.extensions.findByType(PublishingExtension::class.java) as PublishingExtension
         if (template.publicationNames.isEmpty() && publishingExtension.publications.size > 0) {
             log.debug("No publication specified in template '{}'. Publications will not be affected by versioning plugin.", template.name)
         }

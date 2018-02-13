@@ -1,13 +1,15 @@
+plugins {
+    id "java"
+    id "maven-publish"
+    id "fr.cvlaminck.gradle.versioning"
+}
+
 version = "1.0"
 group = "fr.cvlaminck.gradle"
-
-apply plugin: "maven-publish"
-apply plugin: "fr.cvlaminck.gradle.versioning"
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            group "fr.cvlaminck.gradle"
             from components.java
         }
     }

@@ -34,7 +34,7 @@ gradlePlugin {
 task functionalTest(type: Test, dependsOn: [":versioning-gradle-plugin:pluginUnderTestMetadata"]) {
     description 'Runs the functional tests.'
     group 'verification'
-    testClassesDir = sourceSets.functionalTest.output.classesDir
+    testClassesDirs = sourceSets.functionalTest.output.classesDirs
     classpath = sourceSets.functionalTest.runtimeClasspath
     mustRunAfter test
     reports {

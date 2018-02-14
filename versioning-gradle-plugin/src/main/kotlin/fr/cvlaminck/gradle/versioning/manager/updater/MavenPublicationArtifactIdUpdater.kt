@@ -2,9 +2,15 @@ package fr.cvlaminck.gradle.versioning.manager.updater
 
 import fr.cvlaminck.gradle.versioning.model.ArtifactIdTemplate
 import org.gradle.api.Project
+import org.gradle.api.internal.tasks.DefaultTaskDependency
 import org.gradle.api.publish.PublishingExtension
+import org.gradle.api.publish.maven.MavenArtifact
 import org.gradle.api.publish.maven.MavenPublication
+import org.gradle.api.publish.maven.internal.artifact.DefaultMavenArtifact
+import org.gradle.api.publish.maven.internal.publication.DefaultMavenPublication
+import org.gradle.internal.FileUtils
 import org.slf4j.LoggerFactory
+import java.nio.file.Paths
 
 class MavenPublicationArtifactIdUpdater : ArtifactIdUpdater {
 
@@ -37,6 +43,39 @@ class MavenPublicationArtifactIdUpdater : ArtifactIdUpdater {
         publication.groupId = newGroupId
         publication.artifactId = newArtifactId
         publication.version = newVersion
+
+        updateMavenArtifacts(project, publication, version)
+    }
+
+    private fun updateMavenArtifacts(project: Project, publication: MavenPublication, version: String?) {
+        val artifacts = publication.artifacts.toList()
+        artifacts.forEach { updateMavenArtifact(project, publication, it, version) }
+    }
+
+    private fun updateMavenArtifact(project: Project, publication: MavenPublication, mavenArtifact: MavenArtifact, version: String?) {
+        val parent = mavenArtifact.file.parent
+        val newFile = Paths.get(parent, computeArtifactNewName(project, mavenArtifact, version)).toFile()
+
+        log.debug("Updating artifact '{}'. New file name: {}", mavenArtifact.file.name, newFile.name)
+
+        val newMavenArtifact = DefaultMavenArtifact(newFile, mavenArtifact.extension, mavenArtifact.classifier)
+        newMavenArtifact.builtBy((mavenArtifact.buildDependencies as DefaultTaskDependency).mutableValues)
+
+        publication.artifacts.remove(mavenArtifact)
+        publication.artifacts.add(newMavenArtifact)
+    }
+
+    private fun computeArtifactNewName(project: Project, mavenArtifact: MavenArtifact, version: String?): String {
+        val sb = StringBuilder()
+        sb.append(project.name)
+        if (mavenArtifact.classifier != null) {
+            sb.append("-${mavenArtifact.classifier}")
+        }
+        if (version != null) {
+            sb.append("-$version")
+        }
+        sb.append(".${mavenArtifact.extension}")
+        return sb.toString()
     }
 
     companion object {

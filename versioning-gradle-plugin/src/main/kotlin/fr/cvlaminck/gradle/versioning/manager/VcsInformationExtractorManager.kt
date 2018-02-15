@@ -5,7 +5,6 @@ import fr.cvlaminck.gradle.versioning.manager.vcs.GitInformationExtractor
 import fr.cvlaminck.gradle.versioning.manager.vcs.VcsInformationExtractor
 import fr.cvlaminck.gradle.versioning.model.VcsInformation
 import org.gradle.api.Project
-import java.nio.file.Paths
 import javax.inject.Inject
 
 class VcsInformationExtractorManager @Inject constructor(
@@ -16,7 +15,8 @@ class VcsInformationExtractorManager @Inject constructor(
 
     fun extractInformation(project: Project): VcsInformation {
         val path = project.projectDir.toPath()
-        val extractor = extractors.firstOrNull { it.isRepository(path) } ?: throw VersioningPluginException("No vcs can be found in directory: $path")
+        val extractor = extractors.firstOrNull { it.isRepository(path) }
+                ?: throw VersioningPluginException("No vcs can be found in directory: $path")
         return extractor.extractInformation(path)
     }
 }

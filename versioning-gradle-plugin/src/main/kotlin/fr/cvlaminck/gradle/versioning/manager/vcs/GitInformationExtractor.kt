@@ -4,7 +4,6 @@ import fr.cvlaminck.gradle.versioning.exception.RepositoryNotFoundException
 import fr.cvlaminck.gradle.versioning.model.VcsInformation
 import org.eclipse.jgit.lib.Repository
 import org.eclipse.jgit.lib.RepositoryBuilder
-import org.gradle.api.Project
 import java.nio.file.Path
 
 class GitInformationExtractor : VcsInformationExtractor {

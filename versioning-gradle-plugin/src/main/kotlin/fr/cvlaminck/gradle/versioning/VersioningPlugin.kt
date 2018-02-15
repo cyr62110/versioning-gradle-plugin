@@ -1,10 +1,10 @@
 package fr.cvlaminck.gradle.versioning
 
 import fr.cvlaminck.gradle.versioning.factory.VersionFactory
-import fr.cvlaminck.gradle.versioning.manager.ArtifactIdGenerator
 import fr.cvlaminck.gradle.versioning.manager.ArtifactIdTemplateSelector
 import fr.cvlaminck.gradle.versioning.manager.ArtifactIdUpdaterManager
 import fr.cvlaminck.gradle.versioning.manager.VcsInformationExtractorManager
+import fr.cvlaminck.gradle.versioning.manager.template.ArtifactIdGenerator
 import fr.cvlaminck.gradle.versioning.manager.updater.MavenPublicationArtifactIdUpdater
 import fr.cvlaminck.gradle.versioning.manager.updater.ProjectArtifactIdUpdater
 import fr.cvlaminck.gradle.versioning.model.ArtifactIdTemplate

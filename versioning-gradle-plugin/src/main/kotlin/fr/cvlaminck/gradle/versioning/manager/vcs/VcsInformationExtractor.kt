@@ -1,7 +1,6 @@
 package fr.cvlaminck.gradle.versioning.manager.vcs
 
 import fr.cvlaminck.gradle.versioning.model.VcsInformation
-import org.gradle.api.Project
 import java.nio.file.Path
 
 interface VcsInformationExtractor {

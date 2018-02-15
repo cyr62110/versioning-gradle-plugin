@@ -3,7 +3,6 @@ package fr.cvlaminck.gradle.versioning.manager
 import fr.cvlaminck.gradle.versioning.model.ArtifactIdTemplate
 import fr.cvlaminck.gradle.versioning.model.VcsInformation
 import fr.cvlaminck.gradle.versioning.model.impl.DefaultArtifactIdTemplate
-import fr.cvlaminck.gradle.versioning.model.impl.DefaultVersioningExtension
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 

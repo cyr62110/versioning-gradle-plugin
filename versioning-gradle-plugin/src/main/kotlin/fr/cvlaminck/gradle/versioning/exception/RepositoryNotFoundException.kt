@@ -1,7 +1,6 @@
 package fr.cvlaminck.gradle.versioning.exception
 
 import java.nio.file.Path
-import kotlin.math.hypot
 
 class RepositoryNotFoundException(
         vcs: String,

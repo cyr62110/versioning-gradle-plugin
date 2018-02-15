@@ -1,7 +1,7 @@
 package fr.cvlaminck.gradle.versioning.manager
 
-import fr.cvlaminck.gradle.versioning.model.VcsInformation
 import fr.cvlaminck.gradle.versioning.model.ArtifactIdTemplate
+import fr.cvlaminck.gradle.versioning.model.VcsInformation
 import fr.cvlaminck.gradle.versioning.model.VersioningExtension
 import org.slf4j.LoggerFactory
 
@@ -24,11 +24,9 @@ class ArtifactIdTemplateSelector {
         return templates.firstOrNull()
     }
 
-    internal fun findAllEligibleTemplates(templates: Sequence<ArtifactIdTemplate>, vcsInformation: VcsInformation): Sequence<ArtifactIdTemplate>
-        = templates.filter { isAtLeastOneBranchPatternMatches(it, vcsInformation) }
+    internal fun findAllEligibleTemplates(templates: Sequence<ArtifactIdTemplate>, vcsInformation: VcsInformation): Sequence<ArtifactIdTemplate> = templates.filter { isAtLeastOneBranchPatternMatches(it, vcsInformation) }
 
-    internal fun isAtLeastOneBranchPatternMatches(template: ArtifactIdTemplate, vcsInformation: VcsInformation): Boolean
-            = template.branchPatterns
+    internal fun isAtLeastOneBranchPatternMatches(template: ArtifactIdTemplate, vcsInformation: VcsInformation): Boolean = template.branchPatterns
             .map(String::toRegex)
             .any { vcsInformation.branchName.matches(it) }
 

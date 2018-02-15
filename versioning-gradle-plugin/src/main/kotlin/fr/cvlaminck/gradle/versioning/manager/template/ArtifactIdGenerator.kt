@@ -1,7 +1,9 @@
-package fr.cvlaminck.gradle.versioning.manager
+package fr.cvlaminck.gradle.versioning.manager.template
 
 import com.github.mustachejava.DefaultMustacheFactory
 import com.github.mustachejava.MustacheFactory
+import fr.cvlaminck.gradle.versioning.manager.template.fn.CapitalizeTemplateFunction
+import fr.cvlaminck.gradle.versioning.manager.template.fn.DateTemplateFunction
 import fr.cvlaminck.gradle.versioning.model.ArtifactId
 import fr.cvlaminck.gradle.versioning.model.ArtifactIdTemplate
 import fr.cvlaminck.gradle.versioning.model.VersioningExtension
@@ -18,20 +20,22 @@ class ArtifactIdGenerator {
         return ArtifactId(
                 null, // FIXME Implements
                 null, // FIXME Implements
-                generateVersion(template, scopes)
+                generate("${template.name}-version", template.template, scopes)
         )
     }
 
-    private fun generateVersion(template: ArtifactIdTemplate, scopes: Map<String, Any>): String {
-        val generator = mustacheFactory.compile(StringReader(template.template), template.name + "-version")
+    internal fun generate(name: String, template: String, scopes: List<Map<String, Any>>): String {
+        val generator = mustacheFactory.compile(StringReader(template), name)
         val outputWriter = StringWriter()
         generator.execute(outputWriter, scopes)
         return outputWriter.toString()
     }
 
-    private fun getScopes(project: Project, versioningExtension: VersioningExtension): Map<String, Any> {
-        // FIXME Set scopes to get ext, version, group, name, version from project
-        return getProjectScopes(project)
+    internal fun getScopes(project: Project, versioningExtension: VersioningExtension): List<Map<String, Any>> {
+        return listOf(
+                getProjectScopes(project),
+                getDefaultTemplateFunction()
+        )
     }
 
     private fun getProjectScopes(project: Project): Map<String, Any> {
@@ -39,6 +43,16 @@ class ArtifactIdGenerator {
                 "version" to project.version,
                 "group" to project.group,
                 "name" to project.name
+        )
+    }
+
+    /**
+     * Returns all the template functions that are supported by the plugin out-of-the-box.
+     */
+    private fun getDefaultTemplateFunction(): Map<String, Any> {
+        return mapOf(
+                "capitalize" to CapitalizeTemplateFunction(),
+                "date" to DateTemplateFunction()
         )
     }
 }

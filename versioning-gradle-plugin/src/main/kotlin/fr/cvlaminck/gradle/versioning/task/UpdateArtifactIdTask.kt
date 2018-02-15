@@ -1,9 +1,9 @@
 package fr.cvlaminck.gradle.versioning.task
 
+import fr.cvlaminck.gradle.versioning.manager.ArtifactIdTemplateSelector
 import fr.cvlaminck.gradle.versioning.manager.ArtifactIdUpdaterManager
 import fr.cvlaminck.gradle.versioning.manager.VcsInformationExtractorManager
-import fr.cvlaminck.gradle.versioning.manager.ArtifactIdGenerator
-import fr.cvlaminck.gradle.versioning.manager.ArtifactIdTemplateSelector
+import fr.cvlaminck.gradle.versioning.manager.template.ArtifactIdGenerator
 import fr.cvlaminck.gradle.versioning.model.VersioningExtension
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
@@ -37,7 +37,7 @@ open class UpdateArtifactIdTask : DefaultTask() {
         }
         log.info("Generated artifact id: {}", artifactId)
 
-        artifactIdUpdaterManager.updateArtifactId(project, template,null, null, artifactId.version) // FIXME Implements name and group
+        artifactIdUpdaterManager.updateArtifactId(project, template, null, null, artifactId.version) // FIXME Implements name and group
     }
 
     companion object {

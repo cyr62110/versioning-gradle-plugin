@@ -7,8 +7,6 @@ import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenArtifact
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.api.publish.maven.internal.artifact.DefaultMavenArtifact
-import org.gradle.api.publish.maven.internal.publication.DefaultMavenPublication
-import org.gradle.internal.FileUtils
 import org.slf4j.LoggerFactory
 import java.nio.file.Paths
 

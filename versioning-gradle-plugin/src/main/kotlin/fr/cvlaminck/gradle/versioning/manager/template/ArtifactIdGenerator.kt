@@ -2,8 +2,6 @@ package fr.cvlaminck.gradle.versioning.manager.template
 
 import com.github.mustachejava.DefaultMustacheFactory
 import com.github.mustachejava.MustacheFactory
-import fr.cvlaminck.gradle.versioning.manager.template.fn.CapitalizeTemplateFunction
-import fr.cvlaminck.gradle.versioning.manager.template.fn.DateTemplateFunction
 import fr.cvlaminck.gradle.versioning.model.ArtifactId
 import fr.cvlaminck.gradle.versioning.model.ArtifactIdTemplate
 import fr.cvlaminck.gradle.versioning.model.VersioningExtension
@@ -32,27 +30,6 @@ class ArtifactIdGenerator {
     }
 
     internal fun getScopes(project: Project, versioningExtension: VersioningExtension): List<Map<String, Any>> {
-        return listOf(
-                getProjectScopes(project),
-                getDefaultTemplateFunction()
-        )
-    }
-
-    private fun getProjectScopes(project: Project): Map<String, Any> {
-        return mapOf(
-                "version" to project.version,
-                "group" to project.group,
-                "name" to project.name
-        )
-    }
-
-    /**
-     * Returns all the template functions that are supported by the plugin out-of-the-box.
-     */
-    private fun getDefaultTemplateFunction(): Map<String, Any> {
-        return mapOf(
-                "capitalize" to CapitalizeTemplateFunction(),
-                "date" to DateTemplateFunction()
-        )
+        return TemplateScopesBuilder(project, versioningExtension, mustacheFactory).build()
     }
 }

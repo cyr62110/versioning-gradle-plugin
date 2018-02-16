@@ -52,6 +52,13 @@ subprojects {
         testRuntime "org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion"
     }
 
+    junitPlatform {
+        filters {
+            includeClassNamePattern '.*Test'
+        }
+        enableStandardTestTask true
+    }
+
     compileKotlin {
         kotlinOptions.jvmTarget = "1.8"
     }

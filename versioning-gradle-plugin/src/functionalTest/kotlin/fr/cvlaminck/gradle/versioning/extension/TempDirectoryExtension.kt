@@ -20,7 +20,7 @@ class TempDirectoryExtension : AfterEachCallback, ParameterResolver {
     }
 
     override fun resolveParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Any {
-        return getLocalStore(extensionContext).getOrComputeIfAbsent(KEY) { key -> createTempDirectory(extensionContext) }
+        return getLocalStore(extensionContext).getOrComputeIfAbsent(KEY) { createTempDirectory() }
     }
 
     override fun afterEach(context: ExtensionContext) {
@@ -38,7 +38,7 @@ class TempDirectoryExtension : AfterEachCallback, ParameterResolver {
         return ExtensionContext.Namespace.create(TempDirectoryExtension::class.java, context)
     }
 
-    private fun createTempDirectory(context: ExtensionContext): Path {
+    private fun createTempDirectory(): Path {
         try {
             return Files.createTempDirectory(KEY)
         } catch (e: IOException) {

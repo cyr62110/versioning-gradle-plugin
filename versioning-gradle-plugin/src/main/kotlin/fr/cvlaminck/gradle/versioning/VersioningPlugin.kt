@@ -84,6 +84,21 @@ open class VersioningPlugin @Inject constructor(
         fun versioning(extensions: ExtensionContainer): VersioningExtension = extensions.getByType(VersioningExtension::class.java)
 
         /**
+         * Find all template that are not restricted to any publications and add all the publication names so they can
+         * affect all publications.
+         */
+        @Mutate
+        fun addPublicationNamesInNonRestrictiveTemplates(versioningExtension: VersioningExtension, extensions: ExtensionContainer) {
+            val publishingExtension: PublishingExtension = extensions.findByType(PublishingExtension::class.java)
+                    ?: return
+            val publicationNames = publishingExtension.publications.names.toTypedArray()
+
+            versioningExtension.templateContainer
+                    .filter { it.publicationNames.isEmpty() }
+                    .forEach { it.publications(*publicationNames) }
+        }
+
+        /**
          * Find the generatePom* tasks for each publication targeted in the versioning extension and add a dependency to
          * the [UpdateArtifactIdTask] so we can be sure that the version in the pom file is updated.
          */
@@ -94,8 +109,9 @@ open class VersioningPlugin @Inject constructor(
 
             val updateArtifactIdTask = tasks.get(UPDATE_ARTIFACT_ID_TASK)
             versioningExtension.templateContainer
-                    .filter { it.publicationNames.isNotEmpty() }
-                    .flatMap { template -> template.publicationNames.map { template to it } }
+                    .flatMap { template ->
+                        template.publicationNames.map { template to it }
+                    }
                     .forEach { pair ->
                         if (publishingExtension.publications.any { it.name == pair.second }) {
                             val generatePomTaskName = "generatePomFileFor${pair.second.capitalize()}Publication"

@@ -1,1 +1,8 @@
+pluginManagement {
+    repositories {
+        jcenter()
+        gradlePluginPortal()
+    }
+}
+
 include ":versioning-gradle-plugin"

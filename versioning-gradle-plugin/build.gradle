@@ -50,11 +50,17 @@ task sourcesJar(type: Jar) {
     from sourceSets.main.allSource
 }
 
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
 publishing {
     publications {
         pluginMaven(MavenPublication) {
             from components.java
             artifact sourcesJar
+            artifact javadocJar
         }
     }
 }

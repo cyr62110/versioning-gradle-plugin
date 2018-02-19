@@ -23,13 +23,12 @@ publishing {
 versioning {
     templates {
         unstable {
-            template "{{version}}-UNSTABLE"
-            branchPatterns "develop"
+            version "{{version}}-UNSTABLE"
+            branch "develop"
         }
         release {
-            template "{{version}}-RELEASE"
-            branchPatterns "master"
-            publications "mavenJava"
+            version "{{version}}-RELEASE"
+            branch "master"
         }
     }
 }

@@ -11,24 +11,39 @@ import org.gradle.api.Named
 interface ArtifactIdTemplate : Named {
 
     /**
-     * Regular expressions that should match the Git branch name to select this template.
+     * Regular expressions that should match the branch name to select this version.
      * A version is selected if at least one of the pattern matches the current Git branch name.
      */
     val branchPatterns: Collection<String>
 
     /**
-     * Collection of name of publications that we must update the version using this template.
+     * Collection of name of publications that we must update the version using this version.
+     * If empty, the version will be applied to all publications.
      */
     val publicationNames: Collection<String>
 
     /**
      * Template used to generate the version name.
      */
-    val template: String
+    val version: String
 
-    fun template(template: String)
+    /**
+     * Set the template used to generate the version name.
+     */
+    fun version(template: String)
 
+    /**
+     * Restrict this version to be applied to publications with name included [publicationNames].
+     */
     fun publications(vararg publicationNames: String)
 
-    fun branchPatterns(vararg branchPatterns: String)
+    /**
+     * Add a branch pattern.
+     */
+    fun branch(branchPattern: String)
+
+    /**
+     * Add branch patterns.
+     */
+    fun branches(vararg branchPatterns: String)
 }

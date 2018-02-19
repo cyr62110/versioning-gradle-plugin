@@ -12,11 +12,11 @@ internal class ArtifactIdTemplateSelectorTest {
     fun findAllEligibleTemplates() {
         val templates: MutableList<ArtifactIdTemplate> = mutableListOf()
         val template1 = DefaultArtifactIdTemplate("test1")
-        template1.branchPatterns("master", "feature/.*")
+        template1.branches("master", "feature/.*")
         val template2 = DefaultArtifactIdTemplate("test2")
-        template2.branchPatterns("develop")
+        template2.branches("develop")
         val template3 = DefaultArtifactIdTemplate("test3")
-        template3.branchPatterns("master", "develop")
+        template3.branches("master", "develop")
         templates.addAll(listOf(template1, template2, template3))
 
         val selector = ArtifactIdTemplateSelector()
@@ -32,7 +32,7 @@ internal class ArtifactIdTemplateSelectorTest {
         val selector = ArtifactIdTemplateSelector()
 
         val artifactIdTemplate = DefaultArtifactIdTemplate("test")
-        artifactIdTemplate.branchPatterns("master", "feature/.*")
+        artifactIdTemplate.branches("master", "feature/.*")
 
         assertTrue(selector.isAtLeastOneBranchPatternMatches(artifactIdTemplate, infoWithBranch("master")))
         assertTrue(selector.isAtLeastOneBranchPatternMatches(artifactIdTemplate, infoWithBranch("feature/test")))

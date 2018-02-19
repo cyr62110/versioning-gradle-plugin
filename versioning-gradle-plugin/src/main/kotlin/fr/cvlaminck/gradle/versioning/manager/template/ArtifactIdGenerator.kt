@@ -18,7 +18,7 @@ class ArtifactIdGenerator {
         return ArtifactId(
                 null, // FIXME Implements
                 null, // FIXME Implements
-                generate("${template.name}-version", template.template, scopes)
+                generate("${template.name}-version", template.version, scopes)
         )
     }
 

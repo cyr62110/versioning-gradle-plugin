@@ -8,12 +8,12 @@ version = "1.0"
 versioning {
     templates {
         unstable {
-            template "{{version}}-SNAPSHOT"
-            branchPatterns "develop"
+            version "{{version}}-SNAPSHOT"
+            branch "develop"
         }
         release {
-            template "{{version}}-RELEASE"
-            branchPatterns "master"
+            version "{{version}}-RELEASE"
+            branch "master"
         }
     }
 }

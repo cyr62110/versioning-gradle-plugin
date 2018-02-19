@@ -13,7 +13,7 @@ open class DefaultArtifactIdTemplate(
     override val branchPatterns: Collection<String>
         get() = _branchPatterns.toList()
 
-    override val template: String
+    override val version: String
         get() = _template!!
 
     override val publicationNames: Collection<String>
@@ -23,11 +23,15 @@ open class DefaultArtifactIdTemplate(
         return _name
     }
 
-    override fun branchPatterns(vararg branchPatterns: String) {
+    override fun branch(branchPattern: String) {
+        _branchPatterns.add(branchPattern)
+    }
+
+    override fun branches(vararg branchPatterns: String) {
         _branchPatterns.addAll(branchPatterns)
     }
 
-    override fun template(template: String) {
+    override fun version(template: String) {
         _template = template
     }
 
@@ -38,7 +42,7 @@ open class DefaultArtifactIdTemplate(
     override fun toString(): String {
         return "DefaultArtifactIdTemplate(" +
                 "name=$name, " +
-                "template=$_template, " +
+                "version=$_template, " +
                 "branchPatterns=$_branchPatterns, " +
                 "publicationNames=$_publicationNames" +
                 ")"

@@ -2,7 +2,7 @@ package fr.cvlaminck.gradle.versioning.manager.template
 
 import com.github.mustachejava.MustacheFactory
 import fr.cvlaminck.gradle.versioning.manager.template.fn.str.CapitalizeTemplateFunction
-import fr.cvlaminck.gradle.versioning.manager.template.fn.DateTemplateFunction
+import fr.cvlaminck.gradle.versioning.manager.template.fn.time.DateTemplateFunction
 import fr.cvlaminck.gradle.versioning.manager.template.fn.str.LowerCaseTemplateFunction
 import fr.cvlaminck.gradle.versioning.manager.template.fn.str.UpperCaseTemplateFunction
 import fr.cvlaminck.gradle.versioning.model.VersioningExtension

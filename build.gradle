@@ -1,24 +1,26 @@
 buildscript {
     ext {
+        kotlinVersion = "1.2.21"
         junitPlatformVersion = "1.0.3"
+        dokkaVersion = "0.9.16-eap-3"
+        bintrayVersion = "1.7.3"
     }
     repositories {
         jcenter()
+        maven {
+            url "https://dl.bintray.com/kotlin/kotlin-eap/"
+        }
     }
     dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "org.junit.platform:junit-platform-gradle-plugin:$junitPlatformVersion"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:$dokkaVersion"
+        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:$bintrayVersion"
     }
-}
-
-plugins {
-    id "org.jetbrains.kotlin.jvm" version "1.2.20" apply false
-    id "com.jfrog.bintray" version "1.7.3" apply false
-    id "org.jetbrains.dokka" version "0.9.15" apply false
 }
 
 allprojects {
     ext {
-        kotlinVersion = "1.2.20"
         junitJupiterVersion = "5.0.1"
         mockitoVersion = "2.12.0"
         kotlinMockitoVersion = "1.5.0"

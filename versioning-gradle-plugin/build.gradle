@@ -50,9 +50,9 @@ task sourcesJar(type: Jar) {
     from sourceSets.main.allSource
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
+task dokkaJar(type: Jar, dependsOn: dokka) {
     classifier = 'javadoc'
-    from javadoc.destinationDir
+    from dokka.outputDirectory
 }
 
 publishing {
@@ -60,7 +60,7 @@ publishing {
         pluginMaven(MavenPublication) {
             from components.java
             artifact sourcesJar
-            artifact javadocJar
+            artifact dokkaJar
         }
     }
 }
